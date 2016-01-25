@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
 	// Use this for initialization
 	void Start () {

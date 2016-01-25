@@ -1,36 +1,91 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class GuardManager : MonoBehaviour
 {
     public static GuardManager instance;
     List<Guard> mGuards;
-    State mState;
+    List<Noise> noiseInGame;
+    GameObject player;
+    public int noiseReach;
 
-enum State
-{
-    Patrol,
-    Alerted,
-    ReturnPatrol,
-    SeePlayer,
-};
-
-
-	void Awake ()
+    void Awake ()
     {
         DontDestroyOnLoad(this);
-        mGuards = new List<Guard>();
-        mState = State.Patrol;
 
-        if (instance == null)
-        {
-            instance = new GuardManager();
-        }
+        player = GameObject.FindGameObjectWithTag("Player");
+        mGuards = new List<Guard>();
+        noiseInGame = new List<Noise>();
     }
 	
 	void Update ()
     {
-	
+	    foreach (Guard guard in mGuards)
+        {
+            if (guard.mState == State.Patrol)
+            {
+                guard.detection(player);
+                return;
+            }
+            if (guard.mState == State.ReturnPatrol)
+            {
+                guard.returnPatrol(player);
+                return;
+            }
+            if (guard.mState == State.SeePlayer)
+            {
+                guard.seePlayer(player);
+                return;
+            }
+            foreach (Noise noise in noiseInGame)
+            {
+                if (guard.mState == State.NoiseHeard)
+                {
+                    guard.hearNoise(noise);
+                    return;
+                }
+            }
+            if (guard.mState == State.Alerted)
+            {
+                //guard.alert();
+                return;
+            }
+        }
 	}
+
+    public void guardDetection(Guard guard)
+    {
+        if (guard.objIsInViewReach(player))
+        {
+            if (guard.objIsVisible(player))
+            {
+                guard.mState = State.SeePlayer;
+                //Action
+
+                return;
+            }
+        }
+        foreach (Noise noise in noiseInGame)
+        {
+            if ((noise.transform.position - guard.transform.position).magnitude < noiseReach)
+            {
+                guard.mState = State.NoiseHeard;
+                //Action
+            }
+        }
+    }
+
+    public static GuardManager GetInstance()
+    {
+        if(instance == null)
+        {
+            instance = new GuardManager();
+        }
+        return instance;
+    }
+
+    public void addNoise(Noise noise)
+    {
+        noiseInGame.Add(noise);
+    }
 }
