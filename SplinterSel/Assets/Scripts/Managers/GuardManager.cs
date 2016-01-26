@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class GuardManager : MonoBehaviour
 {
     public static GuardManager instance;
-    List<Guard> mGuards;
+    Guard[] mGuards;
     List<Noise> noiseInGame;
     GameObject player;
     public int noiseReach;
@@ -14,66 +14,46 @@ public class GuardManager : MonoBehaviour
         DontDestroyOnLoad(this);
 
         player = GameObject.FindGameObjectWithTag("Player");
-        mGuards = new List<Guard>();
+        mGuards = GameObject.FindObjectsOfType<Guard>() as Guard[];
         noiseInGame = new List<Noise>();
     }
 	
 	void Update ()
     {
-	    foreach (Guard guard in mGuards)
+        Guard guard;
+        for(int i = 0; i < mGuards.Length; i++)
         {
+            guard = mGuards[i];
             if (guard.mState == State.Patrol)
             {
                 guard.detection(player);
-                return;
+                continue;
             }
             if (guard.mState == State.ReturnPatrol)
             {
                 guard.returnPatrol(player);
-                return;
+                continue;
             }
             if (guard.mState == State.SeePlayer)
             {
                 guard.seePlayer(player);
-                return;
+                continue;
             }
             foreach (Noise noise in noiseInGame)
             {
                 if (guard.mState == State.NoiseHeard)
                 {
                     guard.hearNoise(noise);
-                    return;
+                    continue;
                 }
             }
             if (guard.mState == State.Alerted)
             {
                 //guard.alert();
-                return;
+                continue;
             }
         }
 	}
-
-    public void guardDetection(Guard guard)
-    {
-        if (guard.objIsInViewReach(player))
-        {
-            if (guard.objIsVisible(player))
-            {
-                guard.mState = State.SeePlayer;
-                //Action
-
-                return;
-            }
-        }
-        foreach (Noise noise in noiseInGame)
-        {
-            if ((noise.transform.position - guard.transform.position).magnitude < noiseReach)
-            {
-                guard.mState = State.NoiseHeard;
-                //Action
-            }
-        }
-    }
 
     public static GuardManager GetInstance()
     {
