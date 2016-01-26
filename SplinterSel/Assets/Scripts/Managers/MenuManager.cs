@@ -4,6 +4,7 @@ using System.Collections;
 public class MenuManager : MonoBehaviour
 {
     private static MenuManager instance;
+    GameManager instanceGM;
 
     public GameObject credits;
     public GameObject mainMenu;
@@ -15,6 +16,7 @@ public class MenuManager : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(this);
+        instanceGM = GameManager.GetInstance();
     }
 
     public void hideAll()
@@ -27,7 +29,7 @@ public class MenuManager : MonoBehaviour
         lose.SetActive(false);
     }
 
-    public MenuManager GetInstance()
+    public static MenuManager GetInstance()
     {
         if(instance == null)
         {
@@ -40,5 +42,33 @@ public class MenuManager : MonoBehaviour
     {
         hideAll();
         mainMenu.SetActive(true);
+    }
+
+    public void onClickPlay()
+    {
+        instanceGM.startGame();
+    }
+
+    public void onClickControl()
+    {
+        hideAll();
+        controls.SetActive(true);
+    }
+
+    public void onClickExit()
+    {
+        Application.Quit();
+    }
+
+    public void victory()
+    {
+        hideAll();
+        win.SetActive(true);
+    }
+
+    public void defeat()
+    {
+        hideAll();
+        lose.SetActive(true);
     }
 }

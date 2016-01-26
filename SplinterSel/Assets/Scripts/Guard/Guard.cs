@@ -14,12 +14,10 @@ public class Guard : MonoBehaviour
     bool currentDest1;
 
     NavMeshAgent agent;
-
-    GuardManager guardManager;
+    
 
 	void Start ()
     {
-        guardManager = GuardManager.GetInstance();
         mState = State.Patrol;
         currentDest1 = true;
         destIfDetection = Resources.Load("Prefabs/destIfDetection") as GameObject;
