@@ -8,8 +8,8 @@ public class Guard : MonoBehaviour
     public State mState;
     public float patrolDuration = 8f;
 
-    GameObject patrolPoint1;
-    GameObject patrolPoint2;
+    public GameObject patrolPoint1;
+    public GameObject patrolPoint2;
     GameObject destIfDetection;
     bool currentDest1;
 
@@ -21,8 +21,6 @@ public class Guard : MonoBehaviour
         mState = State.Patrol;
         currentDest1 = true;
         destIfDetection = Resources.Load("Prefabs/destIfDetection") as GameObject;
-        patrolPoint1 = Resources.Load("Prefabs/PatrolPoint1") as GameObject;
-        patrolPoint2 = Resources.Load("Prefabs/PatrolPoint2") as GameObject;
         agent = GetComponent<NavMeshAgent>();
         agent.SetDestination(patrolPoint1.transform.position);
 
@@ -50,10 +48,14 @@ public class Guard : MonoBehaviour
 
     public void returnPatrol(GameObject player)
     {
-        if (objIsVisible(player))
+        if (objIsInViewReach(player))
         {
-            destIfDetection.transform.position = player.transform.position;
-            agent.SetDestination(destIfDetection.transform.position);
+            if (objIsVisible(player))
+            {
+                destIfDetection.transform.position = player.transform.position;
+                agent.SetDestination(destIfDetection.transform.position);
+                mState = State.SeePlayer;
+            }
         }
         if (agent.velocity.magnitude < 0.1f)
         {
@@ -64,12 +66,15 @@ public class Guard : MonoBehaviour
 
     public void seePlayer(GameObject player)
     {
-        if (objIsVisible(player))
+        if (objIsInViewReach(player))
         {
-            destIfDetection.transform.position = player.transform.position;
-            agent.SetDestination(destIfDetection.transform.position);
+            if (objIsVisible(player))
+            {
+                destIfDetection.transform.position = player.transform.position;
+                agent.SetDestination(destIfDetection.transform.position);
+            }
         }
-        if(agent.velocity.magnitude < 0.1f)
+        if (agent.velocity.magnitude < 0.1f)
         {
             agent.SetDestination(patrolPoint1.transform.position);
             mState = State.ReturnPatrol;
@@ -78,13 +83,16 @@ public class Guard : MonoBehaviour
 
     public void detection(GameObject player)
     {
-        if(objIsVisible(player))
+        if(objIsInViewReach(player))
         {
-            CancelInvoke("Patrol");
-            destIfDetection.transform.position = player.transform.position;
+            if (objIsVisible(player))
+            {
+                CancelInvoke("Patrol");
+                destIfDetection.transform.position = player.transform.position;
 
-            agent.SetDestination(destIfDetection.transform.position);
-            mState = State.SeePlayer;
+                agent.SetDestination(destIfDetection.transform.position);
+                mState = State.SeePlayer;
+            }
         }
     }
 
