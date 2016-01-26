@@ -32,8 +32,8 @@ public class Guard : MonoBehaviour
         Vector3 distance = obj.transform.position - transform.position;
         if (distance.magnitude < reachView)
         {
-            float angle = Mathf.Atan2(obj.transform.position.x, obj.transform.position.z);
-            if(angle < Mathf.PI/12 && angle > -Mathf.PI / 12)
+            float angle = Mathf.Atan2(obj.transform.position.z, obj.transform.position.x);
+            if (angle < Mathf.PI/12 && angle > -Mathf.PI / 12)
             {
                 return true;
             }

@@ -14,42 +14,43 @@ public class GuardManager : MonoBehaviour
         DontDestroyOnLoad(this);
 
         player = GameObject.FindGameObjectWithTag("Player");
-        mGuards = GameObject.FindObjectsOfType<Guard>();
+        mGuards = GameObject.FindObjectsOfType<Guard>() as Guard[];
         noiseInGame = new List<Noise>();
     }
 	
 	void Update ()
     {
-	    foreach (Guard guard in mGuards)
+        Guard guard;
+        for(int i = 0; i < mGuards.Length; i++)
         {
-            Debug.Log(guard.mState);
+            guard = mGuards[i];
             if (guard.mState == State.Patrol)
             {
                 guard.detection(player);
-                return;
+                continue;
             }
             if (guard.mState == State.ReturnPatrol)
             {
                 guard.returnPatrol(player);
-                return;
+                continue;
             }
             if (guard.mState == State.SeePlayer)
             {
                 guard.seePlayer(player);
-                return;
+                continue;
             }
             foreach (Noise noise in noiseInGame)
             {
                 if (guard.mState == State.NoiseHeard)
                 {
                     guard.hearNoise(noise);
-                    return;
+                    continue;
                 }
             }
             if (guard.mState == State.Alerted)
             {
                 //guard.alert();
-                return;
+                continue;
             }
         }
 	}
