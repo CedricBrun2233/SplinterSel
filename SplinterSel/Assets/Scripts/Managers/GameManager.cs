@@ -7,25 +7,23 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     GuardManager instanceGuardsM;
     MenuManager instanceMM;
+    MusicManager instanceMusic;
     private static bool lostState;
     private static bool winState;
 
     void Awake ()
     {
         DontDestroyOnLoad(this);
+        instanceMusic = GameObject.FindGameObjectWithTag("Music").GetComponent<MusicManager>();
     }
 
     void OnLevelWasLoaded(int lv)
     {
         if(lv == 1)
         {
-
-            Debug.Log("OnLevel...");
-            Debug.Log("menu charge: "+lostState);
-
             instanceMM = MenuManager.GetInstance();
 
-            if(lostState)
+            if (lostState)
             {
                 instanceMM.defeat();
                 lostState = false;
@@ -36,12 +34,15 @@ public class GameManager : MonoBehaviour
                 instanceMM.victory();
                 winState = false;
             }
+
+            
         }
 
         if(lv == 2)
         {
             instanceGuardsM = GuardManager.GetInstance();
             instanceGuardsM.initialize();
+            instanceMusic.launchGameLoopMusic();
         }
     }
 
@@ -75,13 +76,7 @@ public class GameManager : MonoBehaviour
 
     public void lose()
     {
-        Debug.Log("GM.lost");
         lostState = true;
-        Debug.Log("lose : "+lostState);
         Application.LoadLevel(1);
-    }
-    void OnLevelLoad()
-    {
-
     }
 }

@@ -5,6 +5,7 @@ public class MenuManager : MonoBehaviour
 {
     private static MenuManager instance;
     GameManager instanceGM;
+    MusicManager instanceMusic;
 
     public static GameObject mainMenu;
     public static GameObject credits;
@@ -15,6 +16,8 @@ public class MenuManager : MonoBehaviour
     void Awake()
     {
         instanceGM = GameManager.GetInstance();
+        instanceMusic = GameObject.FindGameObjectWithTag("Music").GetComponent<MusicManager>();
+        instanceMusic.launchMenuMusic();
 
         mainMenu = GameObject.Find("MainMenu");
         controls = GameObject.Find("ControlsMenu");
@@ -23,11 +26,6 @@ public class MenuManager : MonoBehaviour
         credits = GameObject.Find("Credits");
         hideAll();
         mainMenu.SetActive(true);
-    }
-
-    void OnLevelWasLoaded(int lv)
-    {
-        
     }
 
     public void hideAll()
@@ -52,6 +50,7 @@ public class MenuManager : MonoBehaviour
     {
         hideAll();
         mainMenu.SetActive(true);
+        instanceMusic.launchMenuMusic();
     }
 
     public void onClickPlay()
@@ -80,11 +79,21 @@ public class MenuManager : MonoBehaviour
     {
         hideAll();
         win.SetActive(true);
+
+        if (instanceMusic == null)
+            instanceMusic = GameObject.FindGameObjectWithTag("Music").GetComponent<MusicManager>();
+
+        instanceMusic.launchWinMusic();
     }
 
     public void defeat()
     {
         hideAll();
         lose.SetActive(true);
+
+        if(instanceMusic == null)
+            instanceMusic = GameObject.FindGameObjectWithTag("Music").GetComponent<MusicManager>();
+
+        instanceMusic.launchDeathMusic();
     }
 }

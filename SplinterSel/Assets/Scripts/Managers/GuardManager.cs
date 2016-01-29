@@ -6,6 +6,7 @@ public class GuardManager : MonoBehaviour
     public static GuardManager instance;
     GameManager GM;
     GameObject[] mGuards;
+    MusicManager instanceMusic;
     List<Noise> noiseInGame;
     GameObject player;
     public int noiseReach;
@@ -13,7 +14,7 @@ public class GuardManager : MonoBehaviour
     void Awake ()
     {
         DontDestroyOnLoad(this);
-
+        instanceMusic = GameObject.FindGameObjectWithTag("Music").GetComponent<MusicManager>();
         GM = GameManager.GetInstance();
         mGuards = new GameObject[0];
     }
@@ -51,11 +52,13 @@ public class GuardManager : MonoBehaviour
             }
             if (guard.mState == State.ReturnPatrol)
             {
+                //instanceMusic.launchGameLoopMusic();
                 guard.returnPatrol(player);
                 continue;
             }
             if (guard.mState == State.SeePlayer)
             {
+                //instanceMusic.launchAlertMusic();
                 guard.seePlayer(player);
                 continue;
             }
@@ -63,6 +66,7 @@ public class GuardManager : MonoBehaviour
             {
                 if (guard.mState == State.NoiseHeard)
                 {
+                    instanceMusic.launchResearchMusic();
                     guard.hearNoise(noise);
                     continue;
                 }

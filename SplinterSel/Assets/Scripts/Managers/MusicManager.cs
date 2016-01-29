@@ -5,6 +5,7 @@ public class MusicManager : MonoBehaviour {
 
     public AudioSource musicSource;
 
+    private static MusicManager instance;
     private bool hOI = false;
     private bool l = false;
     private bool o = false;
@@ -29,29 +30,43 @@ public class MusicManager : MonoBehaviour {
     public AudioClip EytBitEpic;
     public AudioClip EytBitSpooky;
 
-    private float timeSpecialMusicStart;
-    private float specialMusicDelay = 30;
-
     void Awake()
     {
-        musicSource.clip = MenuState;
-        musicSource.Play();
-        musicSource.loop = true;
+        DontDestroyOnLoad(this);
     }
 
 	// Use this for initialization
 	void Start () {
-        timeSpecialMusicStart = Time.time;
 	}
+
+    public static MusicManager GetInstance()
+    {
+        if (instance == null)
+        {
+            instance = new MusicManager();
+        }
+        return instance;
+    }
 
     public void launchMenuMusic()
     {
         if (hOI)
-            musicSource.clip = EytBitMenu;
+        {
+            if(musicSource.clip != EytBitMenu)
+            {
+                musicSource.clip = EytBitMenu;
+                musicSource.Play();
+            }
+        }
         else
-            musicSource.clip = MenuState;
-
-        musicSource.Play();
+        {
+            if(musicSource.clip != MenuState)
+            {
+                musicSource.clip = MenuState;
+                musicSource.Play();
+            }
+        }
+            
         musicSource.loop = true;
     }
 
@@ -80,11 +95,22 @@ public class MusicManager : MonoBehaviour {
     public void launchAlertMusic()
     {
         if (hOI)
-            musicSource.clip = EytBitAlert;
+        {
+            if (musicSource.clip != EytBitAlert)
+            {
+                musicSource.clip = EytBitAlert;
+                musicSource.Play();
+            }
+        }
         else
-            musicSource.clip = AlertState;
+        {
+            if (musicSource.clip != AlertState)
+            {
+                musicSource.clip = AlertState;
+                musicSource.Play();
+            }
+        }
 
-        musicSource.Play();
         musicSource.loop = true;
     }
 
