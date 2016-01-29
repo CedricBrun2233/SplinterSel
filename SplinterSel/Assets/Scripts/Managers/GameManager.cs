@@ -7,10 +7,42 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     GuardManager instanceGuardsM;
     MenuManager instanceMM;
+    private static bool lostState;
+    private static bool winState;
 
     void Awake ()
     {
         DontDestroyOnLoad(this);
+    }
+
+    void OnLevelWasLoaded(int lv)
+    {
+        if(lv == 1)
+        {
+
+            Debug.Log("OnLevel...");
+            Debug.Log("menu charge: "+lostState);
+
+            instanceMM = MenuManager.GetInstance();
+
+            if(lostState)
+            {
+                instanceMM.defeat();
+                lostState = false;
+            }
+
+            if(winState)
+            {
+                instanceMM.victory();
+                winState = false;
+            }
+        }
+
+        if(lv == 2)
+        {
+            instanceGuardsM = GuardManager.GetInstance();
+            instanceGuardsM.initialize();
+        }
     }
 
     void Update()
@@ -33,21 +65,20 @@ public class GameManager : MonoBehaviour
     public void startGame()
     {
         Application.LoadLevel(2);
-        instanceGuardsM.initialize();
     }
 
     public void win()
     {
+        winState = true;
         Application.LoadLevel(1);
-        instanceMM = MenuManager.GetInstance();
-        instanceMM.victory();
     }
 
     public void lose()
     {
+        Debug.Log("GM.lost");
+        lostState = true;
+        Debug.Log("lose : "+lostState);
         Application.LoadLevel(1);
-        instanceMM = MenuManager.GetInstance();
-        instanceMM.defeat();
     }
     void OnLevelLoad()
     {

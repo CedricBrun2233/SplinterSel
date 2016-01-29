@@ -6,15 +6,14 @@ public class MenuManager : MonoBehaviour
     private static MenuManager instance;
     GameManager instanceGM;
 
-    GameObject credits;
-    GameObject mainMenu;
-    GameObject controls;
-    GameObject win;
-    GameObject lose;
+    public static GameObject mainMenu;
+    public static GameObject credits;
+    public static GameObject controls;
+    public static GameObject win;
+    public static GameObject lose;
 
     void Awake()
     {
-        Debug.Log("Yolo");
         instanceGM = GameManager.GetInstance();
 
         mainMenu = GameObject.Find("MainMenu");
@@ -22,13 +21,13 @@ public class MenuManager : MonoBehaviour
         win = GameObject.Find("WinPanel");
         lose = GameObject.Find("LosePanel");
         credits = GameObject.Find("Credits");
-        Debug.Log(mainMenu);
-        Debug.Log(controls);
-        Debug.Log(win);
-        Debug.Log(lose);
-        Debug.Log(credits);
         hideAll();
         mainMenu.SetActive(true);
+    }
+
+    void OnLevelWasLoaded(int lv)
+    {
+        
     }
 
     public void hideAll()
@@ -64,6 +63,12 @@ public class MenuManager : MonoBehaviour
     {
         hideAll();
         controls.SetActive(true);
+    }
+
+    public void onClickCredits()
+    {
+        hideAll();
+        credits.SetActive(true);
     }
 
     public void onClickExit()
