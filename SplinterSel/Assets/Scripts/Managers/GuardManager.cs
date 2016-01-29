@@ -4,7 +4,8 @@ using System.Collections.Generic;
 public class GuardManager : MonoBehaviour
 {
     public static GuardManager instance;
-    Guard[] mGuards;
+    GameManager GM;
+    GameObject[] mGuards;
     List<Noise> noiseInGame;
     GameObject player;
     public int noiseReach;
@@ -13,17 +14,35 @@ public class GuardManager : MonoBehaviour
     {
         DontDestroyOnLoad(this);
 
+        GM = GameManager.GetInstance();
+        mGuards = new GameObject[0];
+    }
+
+    public void initialize()
+    {
         player = GameObject.FindGameObjectWithTag("Player");
-        mGuards = GameObject.FindObjectsOfType<Guard>() as Guard[];
-        noiseInGame = new List<Noise>();
+        mGuards = GameObject.FindGameObjectsWithTag("Guard");
     }
 	
 	void Update ()
     {
-        Guard guard;
-        for(int i = 0; i < mGuards.Length; i++)
+        if(Application.loadedLevel == 2)
         {
-            guard = mGuards[i];
+            initialize();
+        }
+        noiseInGame = new List<Noise>();
+        Guard guard;
+
+        for (int i = 0; i < mGuards.Length; i++)
+        {
+            if (Application.loadedLevel != 2) return;
+            guard = mGuards[i].GetComponent<Guard>();
+            
+            if ((guard.transform.position - player.transform.position).magnitude < 0.8)
+            {
+                GM.lose();
+            }
+
             if (guard.mState == State.Patrol)
             {
                 guard.detection(player);

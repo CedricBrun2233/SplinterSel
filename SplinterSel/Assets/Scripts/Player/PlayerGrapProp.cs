@@ -6,9 +6,11 @@ public class PlayerGrapProp : MonoBehaviour {
     public float throwForce = 0;
     private Rigidbody propToGrabRB;
     private Collider propToGrabcol;
+    private GameObject propFinish;
     private Vector3 initScale;
     private bool grabbed = false;
     private bool disabled = false;
+    private bool itemFinishInStock = false;
 
     public void disableGrab()
     {
@@ -27,6 +29,11 @@ public class PlayerGrapProp : MonoBehaviour {
             propToGrabRB = col.gameObject.GetComponent<Rigidbody>();
             propToGrabcol = col.gameObject.GetComponent<Collider>();
         }
+
+        if (col.transform.tag == "Finish")
+        {
+            propFinish = col.gameObject;
+        }
     }
 
     void OnCollisionExit(Collision col)
@@ -36,18 +43,32 @@ public class PlayerGrapProp : MonoBehaviour {
             propToGrabRB = null;
             propToGrabcol = null;
         }
+
+        if (col.transform.tag == "Finish")
+        {
+            propFinish = null;
+        }
     }
+
+    public bool hasWin()
+    {
+        return itemFinishInStock;
+    }
+
+
 
 	// Use this for initialization
 	void Start () {
 	
 	}
-	
-	// Update is called once per frame
+
+    // Update is called once per frame
 	void FixedUpdate () {
-        if (Input.GetButtonDown("Grab") && propToGrabRB != null && !disabled)
+        if (Input.GetButtonDown("Grab") && !disabled)
+        {
+            if(propToGrabRB != null)
             {
-                if(grabbed)
+                if (grabbed)
                 {
                     propToGrabRB.transform.parent = null;
                     propToGrabRB.transform.localScale = initScale;
@@ -69,5 +90,12 @@ public class PlayerGrapProp : MonoBehaviour {
                     grabbed = true;
                 }
             }
+                
+            if(propFinish != null)
+            {
+                propFinish.SetActive(false);
+                itemFinishInStock = true;
+            }
+        }
 	}
 }

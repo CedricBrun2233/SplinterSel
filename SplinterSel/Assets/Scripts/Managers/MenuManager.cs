@@ -6,24 +6,29 @@ public class MenuManager : MonoBehaviour
     private static MenuManager instance;
     GameManager instanceGM;
 
-    public GameObject credits;
-    public GameObject mainMenu;
-    public GameObject inGame;
-    public GameObject controls;
-    public GameObject win;
-    public GameObject lose;
+    GameObject credits;
+    GameObject mainMenu;
+    GameObject controls;
+    GameObject win;
+    GameObject lose;
 
     void Awake()
     {
-        DontDestroyOnLoad(this);
         instanceGM = GameManager.GetInstance();
+
+        mainMenu = GameObject.Find("MainMenu");
+        controls = GameObject.Find("ControlsMenu");
+        win = GameObject.Find("WinPanel");
+        lose = GameObject.Find("LosePanel");
+        credits = GameObject.Find("Credits");
+        hideAll();
+        mainMenu.SetActive(true);
     }
 
     public void hideAll()
     {
         credits.SetActive(false);
         mainMenu.SetActive(false);
-        inGame.SetActive(false);
         controls.SetActive(false);
         win.SetActive(false);
         lose.SetActive(false);

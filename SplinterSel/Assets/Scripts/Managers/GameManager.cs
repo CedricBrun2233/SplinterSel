@@ -1,17 +1,24 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using System;
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
+    GuardManager instanceGuardsM;
     MenuManager instanceMM;
 
     void Awake ()
     {
         DontDestroyOnLoad(this);
-        instanceMM = MenuManager.GetInstance();
+    }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            win();
+        }
     }
 
     public static GameManager GetInstance()
@@ -26,17 +33,20 @@ public class GameManager : MonoBehaviour
     public void startGame()
     {
         Application.LoadLevel(2);
+        instanceGuardsM.initialize();
     }
 
     public void win()
     {
         Application.LoadLevel(1);
+        instanceMM = MenuManager.GetInstance();
         instanceMM.victory();
     }
 
     public void lose()
     {
         Application.LoadLevel(1);
+        instanceMM = MenuManager.GetInstance();
         instanceMM.defeat();
     }
 }
