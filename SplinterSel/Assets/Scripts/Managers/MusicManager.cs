@@ -4,15 +4,30 @@ using System.Collections;
 public class MusicManager : MonoBehaviour {
 
     public AudioSource musicSource;
+
+    private bool hOI = false;
+    private bool l = false;
+    private bool o = false;
+    private bool v = false;
+
+    //Music normal
     public AudioClip GameState;
     public AudioClip AlertState;
     public AudioClip ResearchState;
     public AudioClip DeathState;
     public AudioClip WinState;
     public AudioClip MenuState;
-    public AudioClip DumbState;
-    public AudioClip EpicState;
-    public AudioClip SpookyState;
+
+    //Music 8-bit
+    public AudioClip EytBitAlert;
+    public AudioClip EytBitResearch;
+    public AudioClip EytBitMenu;
+    public AudioClip EytBitGameLoop;
+    public AudioClip EytBitDeath;
+    public AudioClip EytBitWin;
+    public AudioClip EytBitDumb;
+    public AudioClip EytBitEpic;
+    public AudioClip EytBitSpooky;
 
     private float timeSpecialMusicStart;
     private float specialMusicDelay = 30;
@@ -31,113 +46,169 @@ public class MusicManager : MonoBehaviour {
 
     public void launchMenuMusic()
     {
-        musicSource.clip = MenuState;
+        if (hOI)
+            musicSource.clip = EytBitMenu;
+        else
+            musicSource.clip = MenuState;
+
         musicSource.Play();
         musicSource.loop = true;
     }
 
     public void launchGameLoopMusic()
     {
-        musicSource.clip = GameState;
+        if (hOI)
+            musicSource.clip = EytBitGameLoop;
+        else
+            musicSource.clip = GameState;
+
         musicSource.Play();
         musicSource.loop = true;
     }
 
     public void launchResearchMusic()
     {
-        musicSource.clip = ResearchState;
+        if (hOI)
+            musicSource.clip = EytBitResearch;
+        else
+            musicSource.clip = ResearchState;
+
         musicSource.Play();
         musicSource.loop = true;
     }
 
     public void launchAlertMusic()
     {
-        musicSource.clip = AlertState;
+        if (hOI)
+            musicSource.clip = EytBitAlert;
+        else
+            musicSource.clip = AlertState;
+
         musicSource.Play();
         musicSource.loop = true;
     }
 
     public void launchDeathMusic()
     {
-        musicSource.clip = DeathState;
+        if (hOI)
+            musicSource.clip = EytBitDeath;
+        else
+            musicSource.clip = DeathState;
+
         musicSource.Play();
         musicSource.loop = false;
     }
 
     public void launchWinMusic()
     {
-        musicSource.clip = WinState;
+        if (hOI)
+            musicSource.clip = EytBitWin;
+        else
+            musicSource.clip = WinState;
+
         musicSource.Play();
         musicSource.loop = false;
     }
 
     public void launchEpicMusic()
     {
-        musicSource.clip = EpicState;
+        musicSource.clip = EytBitEpic;
         musicSource.Play();
         musicSource.loop = true;
     }
 
     public void launchSpookyMusic()
     {
-        musicSource.clip = SpookyState;
+        musicSource.clip = EytBitSpooky;
         musicSource.Play();
         musicSource.loop = true;
     }
 
     public void launchDumbMusic()
     {
-        musicSource.clip = DumbState;
+        musicSource.clip = EytBitSpooky;
         musicSource.Play();
         musicSource.loop = true;
     }
 	
 	// Update is called once per frame
 	void Update () {
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            l = !l;
+        }
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            o = !o;
+        }
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            v = !v;
+        }
+
+        if(l && o && v && !hOI)
+        {
+            hOI = true;
+
+            if (musicSource.clip == MenuState)
+                launchMenuMusic();
+
+            if (musicSource.clip == GameState)
+                launchGameLoopMusic();
+
+            if (musicSource.clip == AlertState)
+                launchAlertMusic();
+
+            if (musicSource.clip == ResearchState)
+                launchResearchMusic();
+
+            if (musicSource.clip == DeathState && musicSource.isPlaying)
+                launchDeathMusic();
+
+            if (musicSource.clip == WinState && musicSource.isPlaying)
+                launchWinMusic();
+        }
+
+        if(!l && !o && !v && hOI)
+        {
+            hOI = false;
+
+            if (musicSource.clip == EytBitMenu || musicSource.clip == EytBitSpooky || musicSource.clip == EytBitEpic || musicSource.clip == EytBitDumb)
+                launchMenuMusic();
+
+            if (musicSource.clip == EytBitGameLoop)
+                launchGameLoopMusic();
+
+            if (musicSource.clip == EytBitAlert)
+                launchAlertMusic();
+
+            if (musicSource.clip == EytBitResearch)
+                launchResearchMusic();
+
+            if (musicSource.clip == EytBitDeath && musicSource.isPlaying)
+                launchDeathMusic();
+
+            if (musicSource.clip == EytBitWin && musicSource.isPlaying)
+                launchWinMusic();
+        }
         
-        if(Input.GetKeyDown(KeyCode.Keypad0))
+        if(hOI)
         {
-            launchGameLoopMusic();
-        }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                launchDumbMusic();
+            }
 
-	    if(Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            launchResearchMusic();
-        }
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                launchEpicMusic();
+            }
 
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            launchAlertMusic();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            launchMenuMusic();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad4))
-        {
-            launchDeathMusic();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad5))
-        {
-            launchWinMusic();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            launchDumbMusic();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            launchEpicMusic();
-        }
-
-        if (Input.GetKeyDown(KeyCode.CapsLock))
-        {
-            launchSpookyMusic();   
+            if (Input.GetKeyDown(KeyCode.CapsLock))
+            {
+                launchSpookyMusic();
+            }
         }
 	}
 }
