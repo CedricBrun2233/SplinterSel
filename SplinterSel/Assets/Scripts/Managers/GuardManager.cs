@@ -38,7 +38,7 @@ public class GuardManager : MonoBehaviour
             if (Application.loadedLevel != 2) return;
             guard = mGuards[i].GetComponent<Guard>();
             
-            if ((guard.transform.position - player.transform.position).magnitude < 0.8)
+            if ((guard.transform.position - player.transform.position).magnitude < 1.1)
             {
                 GM.lose();
             }

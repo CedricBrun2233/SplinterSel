@@ -49,4 +49,8 @@ public class GameManager : MonoBehaviour
         instanceMM = MenuManager.GetInstance();
         instanceMM.defeat();
     }
+    void OnLevelLoad()
+    {
+
+    }
 }

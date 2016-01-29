@@ -14,6 +14,7 @@ public class MenuManager : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log("Yolo");
         instanceGM = GameManager.GetInstance();
 
         mainMenu = GameObject.Find("MainMenu");
@@ -21,6 +22,11 @@ public class MenuManager : MonoBehaviour
         win = GameObject.Find("WinPanel");
         lose = GameObject.Find("LosePanel");
         credits = GameObject.Find("Credits");
+        Debug.Log(mainMenu);
+        Debug.Log(controls);
+        Debug.Log(win);
+        Debug.Log(lose);
+        Debug.Log(credits);
         hideAll();
         mainMenu.SetActive(true);
     }

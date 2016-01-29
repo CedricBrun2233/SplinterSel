@@ -22,12 +22,12 @@ public class PlayerGrapProp : MonoBehaviour {
         disabled = false;
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
         if (col.transform.tag == "Item")
         {
             propToGrabRB = col.gameObject.GetComponent<Rigidbody>();
-            propToGrabcol = col.gameObject.GetComponent<Collider>();
+            propToGrabcol = col.GetComponent<Collider>();
         }
 
         if (col.transform.tag == "Finish")
@@ -36,7 +36,7 @@ public class PlayerGrapProp : MonoBehaviour {
         }
     }
 
-    void OnCollisionExit(Collision col)
+    void OnTriggerExit(Collider col)
     {
         if (col.transform.tag == "Item")
         {
